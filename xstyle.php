@@ -80,7 +80,7 @@ class XStyle extends ProtoObject {
 			if( $val instanceof SimpleXMLElement ) $val= dom_import_simplexml( $val );
 			if( $val->ownerDocument ) $val= $val->ownerDocument;
 		endif;
-		if(!( $val instanceof DOMDocument )) throw new Exception( 'unsupported type' );
+		if(!( $val instanceof DOMDocument )) throw new Exception( 'wrong type' );
 		return $val;
 	}
 
