@@ -228,4 +228,38 @@
     	<xsl:text disable-output-escaping="yes">&lt;/xsl:attribute&gt;</xsl:text>
     </xsl:template>
 
+    <xsl:template match=" processing-instruction()[ name() = 'DOCTYPE' or name() = 'doctype' ] ">
+    	<xsl:variable name="system" select=" substring-before( substring-after( ., '&quot; &quot;' ), '&quot;' ) " />
+    	<xsl:variable name="public" select=" substring-after( substring-before( ., '&quot; &quot;' ), '&quot;' ) " />
+    	<xsl:element name="xsl:output">
+    		<xsl:if test=" $public ">
+	    		<xsl:attribute name="doctype-public">
+	    			<xsl:value-of select=" $public " />
+	    		</xsl:attribute>
+	    	</xsl:if>
+    		<xsl:if test=" $system ">
+	    		<xsl:attribute name="doctype-system">
+	    			<xsl:value-of select=" $system " />
+	    		</xsl:attribute>
+	    	</xsl:if>
+    	</xsl:element>
+    </xsl:template>
+
+    <xsl:template match=" processing-instruction()[ name() = 'comment' ] ">
+    	<xsl:element name="xsl:comment">
+    		<xsl:value-of select=" . " />
+    	</xsl:element>
+    </xsl:template>
+
+    <xsl:template match=" processing-instruction()[ name() = 'pi' ] ">
+    	<xsl:variable name="name" select=" normalize-space( substring-before( ., ' \ ' ) ) " />
+    	<xsl:variable name="content" select=" substring-after( ., ' \ ' ) " />
+    	<xsl:element name="xsl:processing-instruction">
+    		<xsl:attribute name="name">
+    			<xsl:value-of select=" $name " />
+    		</xsl:attribute>
+    		<xsl:value-of select=" $content " />
+    	</xsl:element>
+    </xsl:template>
+
 </xsl:stylesheet>
