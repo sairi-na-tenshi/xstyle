@@ -4,10 +4,6 @@ require_once( 'proto.php' );
 
 class XStyle extends ProtoObject {
 
-	function __construct( $xsPath ){
-		$this->xsPath= $xsPath;
-	}
-
 	protected $_dir;
 
 	protected $_xsPath;
@@ -117,7 +113,7 @@ class XStyle extends ProtoObject {
 	function process( $doc ){
 		$this->aDocument( &$doc );
 		$res= $this->processor->transformToDoc( $doc );
-		return $res;
+		return $this->aDocument( $res );
 	}
 
 	function sync( ){
@@ -133,7 +129,8 @@ class XStyle extends ProtoObject {
 		$xs= $this->xs;
 		$dir= getcwd();
 		chdir( $this->dir );
-		$xs2xsl= new $this( __DIR__ . '/xs2xsl.xs' );
+		$xs2xsl= new $this;
+		$xs2xsl->xslPath= __DIR__ . '/xs2xsl.xsl';
 		$xsl= $xs2xsl->process( $xs );
 		chdir( $dir );
 		$this->xs= $xs;
